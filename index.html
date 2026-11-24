@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidecar: AI Chief of Staff</title>
+<meta name="description" content="Sidecar is mbito's personal AI chief of staff: a Claude Code orchestrator running a small team of AI agents, a hands-free voice link and a fleet of Linux machines that control each other. Built in about a day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f6f3;--surface:#ffffff;--text:#1c1d1f;--muted:#5f6368;--line:#e3e1dc;
+  --accent:#7c5cff;--accent-soft:#efeaff;--ok:#2f9e5b;--warn:#c98a00;--code:#f0eee9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101214;--surface:#171a1d;--text:#e8e8e6;--muted:#a0a4a8;--line:#2a2e33;
+    --accent:#a593ff;--accent-soft:#221d3a;--ok:#57c785;--warn:#e5b340;--code:#1f2327;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101214;--surface:#171a1d;--text:#e8e8e6;--muted:#a0a4a8;--line:#2a2e33;
+  --accent:#a593ff;--accent-soft:#221d3a;--ok:#57c785;--warn:#e5b340;--code:#1f2327;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif}
+a{color:var(--accent)}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.9em}
+code{background:var(--code);padding:.1em .35em;border-radius:5px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header.hero{padding:72px 0 40px}
+.eyebrow{font:500 13px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(36px,7vw,60px);line-height:1.05;margin:14px 0 16px;letter-spacing:-.02em}
+.lede{font-size:clamp(17px,2.4vw,20px);color:var(--muted);max-width:680px;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:36px 0 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat b{display:block;font-size:28px;letter-spacing:-.02em}
+.stat span{color:var(--muted);font-size:14px}
+section{padding:44px 0;border-top:1px solid var(--line)}
+h2{font-size:28px;letter-spacing:-.01em;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 24px;max-width:700px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.tag{display:inline-block;font:500 12px/1 "JetBrains Mono",monospace;background:var(--accent-soft);color:var(--accent);padding:5px 8px;border-radius:999px;margin-bottom:10px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 22px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px}
+.arrow{color:var(--muted)}
+.lights{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:15px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.timeline{list-style:none;padding:0;margin:0;position:relative}
+.timeline li{position:relative;padding:0 0 22px 28px}
+.timeline li::before{content:"";position:absolute;left:5px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.timeline li::after{content:"";position:absolute;left:9px;top:20px;bottom:0;width:2px;background:var(--line)}
+.timeline li:last-child::after{display:none}
+.timeline b{display:block}
+.timeline span{color:var(--muted);font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:600}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 12px}
+ul.clean{padding-left:20px;margin:0}
+ul.clean li{margin:6px 0}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">AI chief of staff · built on Claude Code</div>
+  <h1>Sidecar</h1>
+  <p class="lede"><b>A personal AI chief of staff.</b> One voice-controlled orchestrator, a team of specialist agents, and a fleet of Linux machines that work as one. I call her Lady. She's built from Claude Code, a handful of small scripts and plain conversation, and this is what we built together in about a day.</p>
+  <div class="stats">
+    <div class="stat"><b>4</b><span>AI agents on the team</span></div>
+    <div class="stat"><b>2 → n</b><span>machines, any one can control any other</span></div>
+    <div class="stat"><b>0</b><span>passwords the assistant has seen</span></div>
+    <div class="stat"><b>~1 day</b><span>from hire to all of this</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>How it works</h2>
+  <p class="sub">I only ever talk to the chief of staff. She decides whether to do a job herself or hand it to a specialist, writes a full brief for that agent, checks what comes back, and reports to me. I hear her answers out loud.</p>
+  <div class="flow">
+    <span class="step">Me (voice or keyboard)</span><span class="arrow">→</span>
+    <span class="step">Chief of staff</span><span class="arrow">→</span>
+    <span class="step">Specialist agents</span><span class="arrow">→</span>
+    <span class="step">Work gets checked</span><span class="arrow">→</span>
+    <span class="step">Spoken answer</span>
+  </div>
+  <div class="grid">
+    <div class="card"><span class="tag">orchestrator</span><h3>Chief of staff ("Lady")</h3><p>Runs the team, briefs and checks every agent, handles everyday engineering herself, and keeps a long-term memory of my preferences and rules.</p></div>
+    <div class="card"><span class="tag">shopping</span><h3>Ebony</h3><p>Finds the best total price across new, open-box, used and refurbished sellers, vets each seller, and returns a ranked shortlist. She only researches and never buys.</p></div>
+    <div class="card"><span class="tag">research</span><h3>Two private specialists</h3><p>Research agents with strict evidence rules: every claim cites a source and a date, and guru or self-reported numbers never count as proof. The chief of staff checks their sources before I see anything.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Hands-free voice</h2>
+  <p class="sub">I click a mic in the top bar and just talk, from any workspace, while doing anything else. Speech-to-text and the voice both run locally, so no audio leaves the machine.</p>
+  <div class="grid">
+    <div class="card"><h3>Listens for speech</h3><p>A small voice-activity detector notices when I start talking and treats a 1.5-second pause as the end of a message.</p></div>
+    <div class="card"><h3>Transcribes locally</h3><p>Whisper runs on the laptop through Voxtype. Saying "wait" at the end holds a thought open until I finish my next sentence.</p></div>
+    <div class="card"><h3>Delivers anywhere</h3><p>The chief of staff lives in a tmux session, and my words are typed straight into it. No windows jump around, and I can be on any workspace.</p></div>
+    <div class="card"><h3>Talks back</h3><p>When she finishes, an offline Piper voice reads the opening of her reply aloud. The mic is ignored while she speaks, and a new message cuts her off mid-sentence.</p></div>
+  </div>
+  <div class="lights">
+    <span><i class="dot" style="background:var(--ok)"></i>Ready: go ahead and talk</span>
+    <span><i class="dot" style="background:var(--warn)"></i>Working or speaking</span>
+    <span><i class="dot" style="border:2px solid var(--muted)"></i>Not running</span>
+  </div>
+  <p class="sub" style="margin-top:12px">A custom Omarchy bar module puts three controls next to the clock: open the chief of staff, a live status light, and the mic toggle.</p>
+</section>
+
+<section>
+  <h2>Any number of machines, one assistant</h2>
+  <p class="sub">Sidecar isn't tied to one computer. Every machine runs the same chief of staff from one shared package, every copy shares one memory, and any machine can reach any other. It started with a laptop and a desktop, and it's built to grow to four or more: laptops as sidecars, desktops as workhorses and storage.</p>
+  <div class="flow">
+    <span class="step">Shared kit + memory (one hub)</span><span class="arrow">⇄</span>
+    <span class="step">Laptop 1</span><span class="step">Laptop 2</span>
+    <span class="step">Desktop 1</span><span class="step">Desktop 2</span><span class="step">…machine n</span>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>Remote power</h3><p>She can sleep or wake any desktop over the network. Sleep instead of shutdown keeps the encrypted disk unlocked, so a wake takes about 18 seconds with no password screen.</p></div>
+    <div class="card"><h3>Files on tap</h3><p>Any machine's drive can show up as a normal folder on the others, so files live on the machine with the most space and are reachable from everywhere.</p></div>
+    <div class="card"><h3>Any machine to any machine</h3><p>Every machine can reach every other over SSH, with keys only. Laptops run SSH only on the home network and switch it off anywhere else. Desktops stay reachable and wake on demand.</p></div>
+    <div class="card"><h3>The browser too</h3><p>Through the Claude in Chrome extension, she can drive websites on any connected machine, like playing a song or opening an email, and asks before anything irreversible.</p></div>
+    <div class="card"><h3>Pet cam</h3><p>A tiny web server streams a desktop webcam to any phone on the home Wi-Fi through a private link. The camera only switches on while someone is watching.</p></div>
+    <div class="card"><h3>Add a machine in minutes</h3><p>Agents, scripts, the bar module and memory live in one git repo. Each machine syncs with a central hub every five minutes. Adding machine n means one install script and one key exchange, not reconfiguring every other machine.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Guardrails</h2>
+  <p class="sub">Getting the trust model right mattered more than any single feature.</p>
+  <ul class="clean">
+    <li><b>The assistant never sees passwords.</b> Whenever something needs one, she opens a terminal and I type it there myself.</li>
+    <li><b>Ask first.</b> Purchases, sending messages, publishing and deleting all need my explicit OK every time, and an OK for one action doesn't carry over to the next.</li>
+    <li><b>Agents are research-only.</b> No accounts, no posting, no spending. The chief of staff checks their sources before I see their results.</li>
+    <li><b>Web pages are data, not instructions.</b> Text on a page can't tell any agent what to do.</li>
+    <li><b>The safety layer pushes back.</b> Claude Code's own checks stopped her twice while she was setting up an always-on camera, until I explicitly approved it.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Day one, roughly in order</h2>
+  <ol class="timeline">
+    <li><b>Hired the chief of staff</b><span>Created the orchestrator agent and the first specialists.</span></li>
+    <li><b>Research runs</b><span>Two rounds of researching legitimate side-income ideas, with policies and evidence checked by the chief of staff.</span></li>
+    <li><b>Hands-free voice</b><span>Went from push-to-talk to talking to her from any workspace, plus a stop command and a status light.</span></li>
+    <li><b>Fixed things along the way</b><span>A Bluetooth panel stuck in the wrong state, an adapter that disappeared when turned off, and voice messages sent to the wrong window.</span></li>
+    <li><b>Took over the desktop</b><span>SSH, Wake-on-LAN, and a fix for an AMD board that woke itself seven seconds after going to sleep.</span></li>
+    <li><b>Pet cam</b><span>A camera viewer on the laptop became a web page any phone at home can open.</span></li>
+    <li><b>On every machine</b><span>Packaged as a kit, installed on the desktop without touching it, and synced both ways.</span></li>
+    <li><b>Next: the fleet</b><span>Two more machines, maybe four, joining the same assistant. Two laptops and two desktops working as one.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Stack</h2>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Layer</th><th>What</th></tr>
+    <tr><td>Agents</td><td>Claude Code (Opus) with custom subagents and persistent memory</td></tr>
+    <tr><td>OS</td><td>Arch Linux with Omarchy and Hyprland, on every machine in the fleet</td></tr>
+    <tr><td>Voice</td><td>Voxtype (Whisper base.en), Piper TTS, a stdlib-only Python voice detector, tmux</td></tr>
+    <tr><td>Desktop UI</td><td>A custom Quickshell bar plugin (QML) and Hyprland keybindings</td></tr>
+    <tr><td>Machines</td><td>OpenSSH with keys only, Wake-on-LAN, sshfs, systemd user services and timers, a git-synced kit</td></tr>
+    <tr><td>Browser</td><td>The Claude in Chrome extension</td></tr>
+  </table>
+  </div>
+</section>
+
+<footer>
+  Built by <a href="https://mbitopm.com">mbito</a> and his chief of staff, November 2026. This is a showcase page only: addresses, keys and personal details are left out on purpose.
+</footer>
+</div>
+</body>
+</html>
